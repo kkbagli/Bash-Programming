@@ -1,0 +1,68 @@
+#!/bin/bash
+
+#Türkçe tamlama için kullanılacak veri setleri
+turkishNouns=(kedi köpek çiçek
+		bitki mevsim taş 
+		sigara böcek insan)
+turkishAdjectives=(sarı uzun güzel
+			kısa çirkin kırmızı
+			kötü iyi soğuk)
+
+#İngilizce tamlama için kullanılacak veri setleri
+englishNouns=(human dog flower
+		plant season stone
+		cigarette bug human)
+englishAdjectives=(tall good yellow
+			short ugly red
+			bad good cold)
+#Tamlama satırı oluşturan fonksiyon
+function GenerateRow {
+    i=1 #Satır sayacı
+
+    while [ "$i" -le $2 ] #satır sayısı kadar dön.
+        do
+        if [ $1 -eq 1 ] #Seçilen dil Türkçe ise
+        then
+
+	        result=${turkishAdjectives[$RANDOM % ${#turkishAdjectives[@]} ]}
+	        result="$result ${turkishNouns[$RANDOM % ${#turkishNouns[@]} ]}"
+
+        else #Seçilen dil İngilizce ise
+
+	        result=${englishAdjectives[$RANDOM % ${#englishAdjectives[@]} ]}
+    	        result="$result ${englishNouns[$RANDOM % ${#englishNouns[@]} ]}"
+
+        fi
+
+        let i=i+1 #Satır sayacı 1 arttırılır.
+        echo "$result" #Oluşturulan tamlama yazdırılır.
+    done
+}
+
+#Kullanıcıdan dil tercihi alınır.
+languageIsValid=0
+while [ "$languageIsValid" -eq 0 ]
+do
+    echo "Lütfen Dil Seçiniz: Türkçe:1  English:2"
+    read selectedLanguage
+    if [ "$selectedLanguage" == "1" ] || [ "$selectedLanguage" == "2" ] 
+    then
+        languageIsValid=1
+    fi
+done
+
+
+#Kullanıcıdan oluşturulacak tamlama satır adeti bilgisi alınır. 
+rowCountIsValid=0
+while [ "$rowCountIsValid" -eq 0 ]
+do
+    echo "Üretmek istediğiniz cümle sayısı:"
+    read rowCount
+    if [[ $rowCount =~ ^-?[0-9]+$ ]]
+    then
+        rowCountIsValid=1
+    fi
+done
+
+#Sonuç satırları oluşturulurç
+GenerateRow "$selectedLanguage" "$rowCount" 
