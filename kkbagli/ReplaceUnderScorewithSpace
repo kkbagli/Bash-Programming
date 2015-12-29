@@ -1,0 +1,43 @@
+#!/bin/bash
+
+echo "******************************"
+
+#Kullanıcıdan kelime bilgisi alınır.
+echo "Lütfen kelime giriniz: "
+read input
+
+result=""
+
+#Eğer input 2 karekterden kısaysa direk yazdırılır.
+if [ ${#input} -le 2 ]
+then
+ result="$input"
+else
+
+firstLetterInput="${input:0: 1}"  #İnputun ilk harfi saklanır.
+middleSectionOfInput="${input:1:-1}"  #İnputun işlemene alıncak bölümü ayrıştırılır.
+lastLetterOfInput="${input: -1}" #İnputun son harfi saklanır.
+
+#Yeni kelimeye ilk harf eklenir.
+result="$firstLetterInput"
+
+#Ayrıştırılan orta bölümün karakter sayısı kadar döngü çalışır.
+for (( i=0; i<${#middleSectionOfInput}; i++ )); do
+    if [ ${middleSectionOfInput:$i:1} == "_" ]  
+    then
+        result="$result " #eğer geçerli karakter alt tire ise yeni kelimeye boşluk eklenir.
+    else
+        result="$result${middleSectionOfInput:$i:1}" #eğer geçerli karakter alt tire değilse yeni kelimeye geçerli karakter eklenir.
+    fi	
+done
+
+#Yeni kelimeye son karakter eklenir.
+
+
+result="$result$lastLetterOfInput"
+
+fi
+#Sonuç metni formatlı yazdırılır.
+printf "Eski Kelime: $input \n"
+printf "Yeni Kelime: $result \n"
+echo "******************************"
